@@ -1,8 +1,11 @@
 {
   "ExpandedNodes": [
     "",
+    "\\frontend",
     "\\frontend\\public",
-    "\\frontend\\src"
+    "\\frontend\\src",
+    "\\frontend\\src\\components",
+    "\\template"
   ],
   "PreviewInSolutionExplorer": false
 }
