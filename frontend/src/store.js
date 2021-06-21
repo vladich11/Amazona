@@ -1,15 +1,20 @@
-import {applyMiddleware, combineReducers, compose, createStore} from 'redux';
+import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
 //Redux-thunk make it possible to send ajax request in our redux actions 
 import thunk from 'redux-thunk';
-import { productListReducers } from './reducers/productReducers';
+import {
+    productListReducer,
+    productDetailsReducer
+} from './reducers/productReducers';
 
 
 
 const initialstate = {};
-// return list of products
+
 const reducer = combineReducers({
-    productList: productListReducers,
+    productList: productListReducer,
+    productDetails: productDetailsReducer,
 })
+
 //Show redux window in redux dev tools in chrome
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
