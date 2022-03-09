@@ -1,6 +1,6 @@
 import React from 'react'
 import Rating from '../components/Rating';
-import data from '../data'
+import data from '../../../backend/data'
 import { Link, useParams } from "react-router-dom";
 
 export default function ProductScreen() {

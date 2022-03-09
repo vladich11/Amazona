@@ -1,6 +1,6 @@
 import React from 'react';
 import Product from '../components/Product';
-import data from '../data';
+import data from '../../../backend/data';
 
 export default function HomeScreen() {
     return (
