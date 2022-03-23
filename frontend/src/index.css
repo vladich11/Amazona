@@ -218,3 +218,13 @@ img.large{
   color:  #a02020;
   background-color: #ffe0e0e0;
  }
+
+ /* My test */
+
+.sideList{
+  background-color: red;
+  width: 30%;
+  height: 100%;
+  z-index: 3;
+  flex: 1;
+}

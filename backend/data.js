@@ -3,22 +3,22 @@ import bcrypt from 'bcryptjs';
 const data = {
     users: [
         {
-          name: 'Vlad',
-          email: 'admin@example.com',
-          password: bcrypt.hashSync('1234', 8),
-          isAdmin: true,
+            name: 'Vlad',
+            email: 'admin@example.com',
+            password: bcrypt.hashSync('1234', 8),
+            isAdmin: true,
         },
         {
-          name: 'John',
-          email: 'user@example.com',
-          password: bcrypt.hashSync('1234', 8),
-          isAdmin: false,
+            name: 'John',
+            email: 'user@example.com',
+            password: bcrypt.hashSync('1234', 8),
+            isAdmin: false,
         },
-      ],
+    ],
     products: [
         {
-            _id: '1',
-            name: 'Nike slim shirt',
+
+            name: 'Nike slim shirt1',
             category: 'Shirts',
             image: '/images/p1.jpg',
             price: 120,
@@ -30,8 +30,8 @@ const data = {
 
         },
         {
-            _id: '2',
-            name: 'Nike slim shirt',
+
+            name: 'Nike slim shirt2',
             category: 'Shirts',
             image: '/images/p2.jpg',
             price: 120,
@@ -44,8 +44,8 @@ const data = {
         },
 
         {
-            _id: '3',
-            name: 'Nike slim shirt',
+
+            name: 'Nike slim shirt3',
             category: 'Shirts',
             image: '/images/p3.jpg',
             price: 120,
@@ -58,8 +58,8 @@ const data = {
         },
 
         {
-            _id: '4',
-            name: 'Nike slim shirt',
+
+            name: 'Nike slim shirt4',
             category: 'Shirts',
             image: '/images/p4.jpg',
             price: 120,
@@ -72,8 +72,7 @@ const data = {
         },
 
         {
-            _id: '5',
-            name: 'Nike slim shirt',
+            name: 'Nike slim shirt5',
             category: 'Shirts',
             image: '/images/p5.jpg',
             price: 120,
@@ -86,8 +85,8 @@ const data = {
         },
 
         {
-            _id: '6',
-            name: 'Nike slim shirt',
+
+            name: 'Nike slim shirt6',
             category: 'Shirts',
             image: '/images/p6.jpg',
             price: 120,
