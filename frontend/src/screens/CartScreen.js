@@ -37,8 +37,8 @@ export default function CartScreen() {
     }
 
     const checkoutHandler = () => {
-        navigate(`/signin?redirect=shipping`);
-    }
+        navigate('/signin?redirect=/shipping');
+    };
     return (
         <div className="row top">
             <div className="col-2">
