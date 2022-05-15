@@ -4,7 +4,7 @@ import { saveShippingAddress } from '../actions/cartActions';
 import { useNavigate } from "react-router-dom";
 import CheckoutSteps from '../components/CheckoutSteps';
 
-export default function ShippingAddressScreen(props) {
+export default function ShippingAddressScreen() {
 
     const navigate = useNavigate();
     const userSignin = useSelector((state) => state.userSignin);
