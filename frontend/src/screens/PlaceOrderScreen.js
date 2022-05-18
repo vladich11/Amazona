@@ -26,7 +26,7 @@ export default function PlaceOrderScreen() {
   }, [navigate, cart.paymentMethod]);
 
 
-  const placeOrderHandler  = () => {
+  const placeOrderHandler = () => {
     //TODO ADD THIS function
     // Dispatch place order action 
   }
@@ -98,30 +98,30 @@ export default function PlaceOrderScreen() {
               <li>
                 <div className='row'>
                   <div>Items</div>
-                  <div>${cart.itemsPrice}</div>
+                  <div>${cart.itemsPrice.toFixed(2)}</div>
                 </div>
               </li>
               <li>
                 <div className='row'>
                   <div>Shipping</div>
-                  <div>${cart.shippingPrice}</div>
+                  <div>${cart.shippingPrice.toFixed(2)}</div>
                 </div>
               </li>
               <li>
                 <div className='row'>
                   <div>Tax</div>
-                  <div>${cart.taxPrice}</div>
+                  <div>${cart.taxPrice.toFixed(2)}</div>
                 </div>
               </li>
               <li>
                 <div className='row'>
                   <div>Order Total:</div>
-                  <div>${cart.totalPrice}</div>
+                  <div>${cart.totalPrice.toFixed(2)}</div>
                 </div>
               </li>
 
               <li>
-                <button type='button' onClick={placeOrderHandler} className='primary block' disabled={cart.cartItems.length === 0 }>
+                <button type='button' onClick={placeOrderHandler} className='primary block' disabled={cart.cartItems.length === 0}>
                   Place Order
                 </button>
               </li>
