@@ -24,7 +24,7 @@ orderRouter.post(
                 shippingAddress: req.body.shippingAddress,
                 paymentMethod: req.body.paymentMethod,
                 itemsPrice: req.body.itemsPrice,
-                shippingPrice: req.body.shppingPrice,
+                shippingPrice: req.body.shippingPrice,
                 taxPrice: req.body.taxPrice,
                 totalPrice: req.body.totalPrice,
                 // Define a middleware to get the user info that purchased this order

@@ -1,35 +1,59 @@
 import React, { useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom';
+import { createOrder } from '../actions/orderActions';
 import CheckoutSteps from '../components/CheckoutSteps'
-
+import { ORDER_CREATE_RESET } from '../constants/orderConstants';
+import LoadingBox from '../components/LoadingBox';
+import MessageBox from '../components/MessageBox';
 
 export default function PlaceOrderScreen() {
+  const navigate = useNavigate();
   // import cart from redux store
   const cart = useSelector(state => state.cart);
-  const navigate = useNavigate();
+  
+   // If the paymend method is not chosen redirect back to payment method screen(when enter placeOrder screen)
+  if (!cart.paymentMethod) {
+    navigate('/payment');
+  }
+  // order create object from redux store
+  const orderCreate = useSelector(state => state.orderCreate);
 
-  //Help function to round number to 2 number after decimal point 5.123 => 5.12
+  // from orderCreate exctarct this values
+  const {loading, success, error,order} = orderCreate;
+
+  //Help function to round number to 2 number after decimal point  5.123 => "5.12" => 5.12
   const toPrice = num => Number(num.toFixed(2));
+
   // cal to sum of the order
   cart.itemsPrice = toPrice(cart.cartItems.reduce((a, c) => a + c.qty * c.price, 0));
+
   // If item cost more than $100 shipping price is 0$
   cart.shippingPrice = cart.itemsPrice > 100 ? toPrice(0) : toPrice(10);
+
   //tax price is 15% of total order
   cart.taxPrice = toPrice(0.15 * cart.itemsPrice);
   cart.totalPrice = cart.itemsPrice + cart.shippingPrice + cart.taxPrice;
-  // If the paymend method is not chosen redirect back to payment method screen(when enter placceOrder screen)
+
+  const dispatch = useDispatch();
+
+ // if user is placed order succesfully redirect to order and reset the cart
   useEffect(() => {
-    if (!cart.paymentMethod) {
-      navigate('/payment');
+  
+    if(success){
+      navigate(`/order/${order._id}`);
+      dispatch({type: ORDER_CREATE_RESET})
     }
-  }, [navigate, cart.paymentMethod]);
+  }, [dispatch,success,navigate,order]);
 
-
+  
   const placeOrderHandler = () => {
-    //TODO ADD THIS function
-    // Dispatch place order action 
+    // Action create order return cart as a premeter 
+    // rename cart items to order items becouse BE expect orderItems and not cart items
+    //use all fields of cart items and rename cartItems to orderItems
+    dispatch(createOrder({ ...cart, orderItems: cart.cartItems }))
   }
+
   return (
 
 
@@ -125,6 +149,8 @@ export default function PlaceOrderScreen() {
                   Place Order
                 </button>
               </li>
+              {loading && <LoadingBox></LoadingBox>}
+              {error && <MessageBox variant="danger">{error}</MessageBox>}
             </ul>
           </div>
         </div>

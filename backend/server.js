@@ -27,7 +27,7 @@ app.use('/api/users', userRouter);
 //Get products
 app.use('/api/products', productRouter);
 // Get the order products
-app.use('/api/orderRouter', orderRouter);
+app.use('/api/orders', orderRouter);
 
 //Error catcher middleware
 // All errors will be redirected to this function 

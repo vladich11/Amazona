@@ -24,7 +24,6 @@ export default function PaymentMethodScreen() {
     const submitHandler = (e) => {
         e.preventDefault();
         dispatch(savePaymentMethod(paymentMethod));
-        alert("I am trying to redirect to placeorder screen!!!");
         navigate('/placeorder');
 
     };
