@@ -11,8 +11,8 @@ export default function PlaceOrderScreen() {
   const navigate = useNavigate();
   // import cart from redux store
   const cart = useSelector(state => state.cart);
-  
-   // If the paymend method is not chosen redirect back to payment method screen(when enter placeOrder screen)
+
+  // If the paymend method is not chosen redirect back to payment method screen(when enter placeOrder screen)
   if (!cart.paymentMethod) {
     navigate('/payment');
   }
@@ -20,7 +20,7 @@ export default function PlaceOrderScreen() {
   const orderCreate = useSelector(state => state.orderCreate);
 
   // from orderCreate exctarct this values
-  const {loading, success, error,order} = orderCreate;
+  const { loading, success, error, order } = orderCreate;
 
   //Help function to round number to 2 number after decimal point  5.123 => "5.12" => 5.12
   const toPrice = num => Number(num.toFixed(2));
@@ -37,16 +37,16 @@ export default function PlaceOrderScreen() {
 
   const dispatch = useDispatch();
 
- // if user is placed order succesfully redirect to order and reset the cart
+  // if user is placed order succesfully redirect to order and reset the cart
   useEffect(() => {
-  
-    if(success){
-      navigate(`/order/${order._id}`);
-      dispatch({type: ORDER_CREATE_RESET})
-    }
-  }, [dispatch,success,navigate,order]);
 
-  
+    if (success) {
+      navigate(`/order/${order._id}`);
+      dispatch({ type: ORDER_CREATE_RESET })
+    }
+  }, [dispatch, success, navigate, order]);
+
+
   const placeOrderHandler = () => {
     // Action create order return cart as a premeter 
     // rename cart items to order items becouse BE expect orderItems and not cart items

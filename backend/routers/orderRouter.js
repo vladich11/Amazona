@@ -37,4 +37,17 @@ orderRouter.post(
         }
     }))
 
+
+// Get the details of the order 
+//expressAsyncHandler() handle errors in async functions  
+orderRouter.get('/:id', isAuth, expressAsyncHandler(async (req, res) => {
+    const order = await Order.findById(req.params.id);
+    if (order) {
+        res.send(order);
+    }
+    else {
+        res.status(404).send({ message: 'Order not Found!' })
+    }
+}))
+
 export default orderRouter;
