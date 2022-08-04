@@ -1,11 +1,16 @@
-import React, { useEffect } from 'react'
+import Axios from 'axios';
+import { PayPalButton } from 'react-paypal-button-v2'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector, } from 'react-redux'
-import { Link, useParams } from 'react-router-dom';
-import { detailsOrder } from '../actions/orderActions';
-import LoadingBox from '../components/LoadingBox';
-import MessageBox from '../components/MessageBox';
+import { Link, useParams } from 'react-router-dom'
+import { detailsOrder } from '../actions/orderActions'
+import LoadingBox from '../components/LoadingBox'
+import MessageBox from '../components/MessageBox'
 
 export default function OrderScreen() {
+
+    //hook for getting the staus of paypal SDK
+    const [sdkReady, setSdkReady] = useState(false);
 
     const params = useParams();
     const { id: orderId } = params;
@@ -16,9 +21,44 @@ export default function OrderScreen() {
 
     const dispatch = useDispatch();
 
+    // When there in a change in order, orderId, sdkReady this function will run
     useEffect(() => {
-        dispatch(detailsOrder(orderId))
-    }, [dispatch, orderId]);
+        // async becouse it send a req to BE TO GET THE CLIENT id
+        const addPayPalScript = async () => {
+            const { data } = await Axios.get('/api/config/paypal');
+            // scrpt element set the sourse of elemnet to the paypal SDK
+            const script = document.createElement('script');
+            script.type = "text/javascript"
+            script.src = `https://www.paypal.com/sdk/js?client-id=${data}`
+            script.async = true;
+            //onload happens when this script is done loading into the browser
+            script.onload = () => {
+                setSdkReady(true);
+            }
+            // all code will become last child of body 
+            document.body.appendChild(script);
+        }
+        // order not loaded
+        if (!order) {
+            //load order from be
+            dispatch(detailsOrder(orderId))
+        } else {
+            if (!order.isPaid) {
+                if (!window.paypal) {
+                    addPayPalScript();
+                } else {
+                    // unpaid order and paypal is already loaded
+                    setSdkReady(true);
+                }
+            }
+        }
+
+    }, [dispatch, order, orderId, sdkReady]);
+
+
+    const successPaymentHandler = () => {
+        // todo : DISPATCH PAYORDER
+    }
 
     return loading ? (<LoadingBox></LoadingBox>) :
         error ? (<MessageBox variant="danger">{error}</MessageBox>)
@@ -117,7 +157,19 @@ export default function OrderScreen() {
                                             <div>${order.totalPrice.toFixed(2)}</div>
                                         </div>
                                     </li>
-
+                                    {
+                                        !order.isPaid && (
+                                            <li>
+                                                {!sdkReady ? (<LoadingBox></LoadingBox>)
+                                                    : (
+                                                        <PayPalButton
+                                                            amount={order.totalPrice}
+                                                            onSuccess={successPaymentHandler}>
+                                                        </PayPalButton>
+                                                    )}
+                                            </li>
+                                        )
+                                    }
 
                                 </ul>
                             </div>

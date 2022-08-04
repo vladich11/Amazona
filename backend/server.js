@@ -5,6 +5,7 @@ import userRouter from './routers/userRouter.js';
 import productRouter from './routers/productRouter.js';
 import orderRouter from './routers/orderRouter.js';
 
+
 dotenv.config();
 
 const app = express();
@@ -21,6 +22,10 @@ app.get('/', (req, res) => {
     res.send('Server is ready');
 });
 
+// Send the paypal id that located in the be to the fe
+app.get('/api/config/paypal', (req, res) => {
+    res.send(process.env.PAYPAL_CLIENT_ID || 'sb');
+})
 
 app.use('/api/users', userRouter);
 
@@ -31,7 +36,7 @@ app.use('/api/orders', orderRouter);
 
 //Error catcher middleware
 // All errors will be redirected to this function 
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
     res.status(500).send({ message: err.message });
 })
 
