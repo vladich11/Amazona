@@ -9,9 +9,11 @@ import orderRouter from './routers/orderRouter.js';
 dotenv.config();
 
 const app = express();
+
 //2 Middlewares to convert http request body content to req.body in node app
 //add new middleware which parse json data
 app.use(express.json());
+
 // the data set in body become the req
 app.use(express.urlencoded({ extended: true }));
 
