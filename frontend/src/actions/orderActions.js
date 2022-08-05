@@ -2,7 +2,7 @@ import {
     ORDER_CREATE_FAIL,
     ORDER_CREATE_REQUEST, ORDER_CREATE_SUCCESS,
     ORDER_DETAILS_FAIL, ORDER_DETAILS_REQUEST,
-    ORDER_DETAILS_SUCCESS, ORDER_PAY_FAIL, ORDER_PAY_REQUEST,
+    ORDER_DETAILS_SUCCESS, ORDER_MINE_LIST_FAIL, ORDER_MINE_LIST_REQUEST, ORDER_MINE_LIST_SUCCESS, ORDER_PAY_FAIL, ORDER_PAY_REQUEST,
     ORDER_PAY_SUCCESS
 }
     from "../constants/orderConstants"
@@ -65,6 +65,8 @@ export const detailsOrder = orderId => async (dispatch, getState) => {
     }
 }
 
+// Pay on order
+
 export const payOrder = (order, paymentResult) => async (dispatch, getState) => {
     dispatch({ type: ORDER_PAY_REQUEST, payload: { order, paymentResult } });
     // GET USER INFO
@@ -83,5 +85,28 @@ export const payOrder = (order, paymentResult) => async (dispatch, getState) => 
             error.response.data.message :
             error.message;
         dispatch({ type: ORDER_PAY_FAIL, payload: message });
+    }
+}
+
+// get user history purchase list
+
+export const listOrderMine = () => async (dispatch, getState) => {
+    dispatch({ type: ORDER_MINE_LIST_REQUEST })
+    // get user info
+    const { userSignin: { userInfo } } = getState()
+    try {
+        //ajax req
+        const { data } = await Axios.get('/api/orders/mine', {
+            headers: {
+                Authorization: `Bearer ${userInfo.token}`
+            },
+        })
+        dispatch({type: ORDER_MINE_LIST_SUCCESS, payload: data})
+    } catch (error) {
+        const message =
+            error.response && error.response.data.message 
+            ? error.response.data.message 
+            : error.message;
+        dispatch({ type: ORDER_MINE_LIST_FAIL, payload: message })
     }
 }

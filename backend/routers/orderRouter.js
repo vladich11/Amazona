@@ -3,7 +3,19 @@ import express from 'express'
 import expressAsyncHandler from 'express-async-handler';
 import Order from '../models/orderModel.js';
 import { isAuth } from '../utils.js';
+
+
+
+
 const orderRouter = express.Router();
+
+//get order list for current user
+orderRouter.get('/mine', isAuth, expressAsyncHandler(async (req, res) => {
+    //get orders from order model
+    // await becouse find function returns a promise but we want the real orders not the promise
+    const orders = await Order.find({ user: req.user._id })
+    res.send(orders)
+}))
 
 
 // create a post request api
