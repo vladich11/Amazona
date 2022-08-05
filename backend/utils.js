@@ -44,3 +44,14 @@ export const isAuth = (req, res, next) => {
         res.status(401).send({ message: 'No Token' });
     }
 };
+
+// middleware TO PROTECT THE admin route in BE (api)
+
+export const isAdmin = (req, res,next) => {
+    if(req.user && req.user.isAdmin){
+        //pass to the next middleware // ok
+        next();
+    }else{
+        res.status(401).send({ message: 'Invalid Admin Token' });
+    }
+}

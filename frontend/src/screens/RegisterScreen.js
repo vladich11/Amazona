@@ -49,7 +49,7 @@ export default function RegisterScreen() {
                 {loading && <LoadingBox></LoadingBox>}
                 {error && <MessageBox variant="danger">{error}</MessageBox>}
                 <div>
-                    <label htmlFor="name">Email address</label>
+                    <label htmlFor="name">Full name</label>
                     <input
                         type="text"
                         id="name"
