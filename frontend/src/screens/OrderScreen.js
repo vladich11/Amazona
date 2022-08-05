@@ -10,7 +10,7 @@ import { ORDER_PAY_RESET } from '../constants/orderConstants';
 
 export default function OrderScreen() {
 
-    //hook for getting the staus of paypal SDK
+    //hook for getting the status of paypal SDK
     const [sdkReady, setSdkReady] = useState(false);
 
     const params = useParams();
