@@ -3,13 +3,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
 import { signout } from './actions/userActions';
 import PrivateRoute from './components/PrivateRoute';
-
+import AdminRoute from './components/AdminRoute';
 import CartScreen from './screens/CartScreen';
 import HomeScreen from './screens/HomeScreen';
 import OrderHistoryScreen from './screens/OrderHistoryScreen';
 import OrderScreen from './screens/OrderScreen';
 import PaymentMethodScreen from './screens/PaymentMethodScreen';
 import PlaceOrderScreen from './screens/PlaceOrderScreen';
+import ProductListScreen from './screens/ProductListScreen';
 import ProductScreen from './screens/ProductScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import RegisterScreen from './screens/RegisterScreen';
@@ -96,7 +97,7 @@ function App() {
           <Routes>
             <Route path="/cart" element={<CartScreen />}></Route>
             <Route path="/cart/:id" element={<CartScreen />}></Route>
-            <Route path="/product/:id" element={<ProductScreen />}></Route>
+            <Route path="/product/:id" element={<ProductScreen />} exact></Route>
             <Route path="/signin" element={<SigninScreen />}></Route>
             <Route path="/register" element={<RegisterScreen />}></Route>
             <Route path="/shipping" element={<ShippingAddressScreen />}></Route>
@@ -111,7 +112,15 @@ function App() {
                 </PrivateRoute>
               }
             />
-            <Route path='/orderhistory' element={<OrderHistoryScreen />}></Route>
+            <Route
+              path="/productlist"
+              element={
+                <AdminRoute>
+                  <ProductListScreen />
+                </AdminRoute>
+              }
+            />
+            <Route path='/orderhistory' element={<OrderHistoryScreen />} />
             <Route path="/" element={<HomeScreen />} exact></Route>
           </Routes>
         </main>

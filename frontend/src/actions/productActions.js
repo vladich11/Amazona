@@ -5,7 +5,10 @@ import {
     PRODUCT_LIST_SUCCESS,
     PRODUCT_DETAILS_REQUEST,
     PRODUCT_DETAILS_SUCCESS,
-    PRODUCT_DETAILS_FAIL
+    PRODUCT_DETAILS_FAIL,
+    PRODUCT_CREATE_REQUEST,
+    PRODUCT_CREATE_FAIL,
+    PRODUCT_CREATE_SUCCESS
 } from "../constants/productConstants"
 
 // Products list action
@@ -38,5 +41,31 @@ export const detailsProduct = (productId) => async (dispatch) => {
                     ? error.response.dat.message
                     : error.message
         });
+    }
+}
+
+//Create product
+export const createProduct = () => async (dispatch, getState) => {
+    //dispatch product create req
+    dispatch({ type: PRODUCT_CREATE_REQUEST })
+    //GET USER INFO from userSignin
+    const { userSignin: { userInfo } } = getState();
+    //ajax req
+    try {
+        //ajax req
+        const { data } = await Axios.post('/api/products', {},
+            {
+                headers: { Authorization: `Bearer ${userInfo.token}` }
+            })
+        dispatch({
+            type: PRODUCT_CREATE_SUCCESS,
+            //data.product is the object coming from the productRouter (product:createdProduct)
+            payload: data.product
+        })
+    } catch (error) {
+        const message = error.response && error.response.data.message
+            ? error.response.dat.message
+            : error.message
+        dispatch({ type: PRODUCT_CREATE_FAIL, payload: message })
     }
 }

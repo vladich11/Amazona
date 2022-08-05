@@ -36,6 +36,7 @@ const reducer = combineReducers({
     userDetails : userDetailsReducer,
     orderMineList : orderMineListReducer,
     userUpdateProfile: userUpdateProfileReducer,
+    productCreate: productDetailsReducer,
 })
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
