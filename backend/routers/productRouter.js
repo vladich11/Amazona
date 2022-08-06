@@ -1,9 +1,9 @@
-import express from "express";
-import expressAsyncHandler from "express-async-handler";
-import Product from "../models/productModel.js";
+import express from "express"
+import expressAsyncHandler from "express-async-handler"
+import Product from "../models/productModel.js"
 import data from "../data.js"
-import { isAdmin, isAuth } from "../utils.js";
-const productRouter = express.Router();
+import { isAdmin, isAuth } from "../utils.js"
+const productRouter = express.Router()
 
 
 // Get all products for homepage
@@ -11,26 +11,26 @@ const productRouter = express.Router();
 productRouter.get(
     '/',
     expressAsyncHandler(async (req, res) => {
-        const products = await Product.find({});
-        res.send(products);
+        const products = await Product.find({})
+        res.send(products)
     })
-);
+)
 
 productRouter.get(
     '/seed',
     expressAsyncHandler(async (req, res) => {
-        //await Product.remove({});
-        const createdProducts = await Product.insertMany(data.products);
-        res.send({ createdProducts });
+        //await Product.remove({})
+        const createdProducts = await Product.insertMany(data.products)
+        res.send({ createdProducts })
     })
-);
+)
 
 //Details product api
 //If we place this api above /seed api will be treated as id 
 productRouter.get(
     '/:id',
     expressAsyncHandler(async (req, res) => {
-        const product = await Product.findById(req.params.id);
+        const product = await Product.findById(req.params.id)
         product ? res.send(product) : res.status(404).send({ message: 'Product Not Found' })
 
     }))
@@ -54,9 +54,9 @@ productRouter.post(
             description: 'sample descrption',
         })
         //save the product in db
-        const createdProduct = await product.save();
+        const createdProduct = await product.save()
         //passing created product to fe
-        res.send({ message: 'Product Created', product: createdProduct });
+        res.send({ message: 'Product Created', product: createdProduct })
     }))
 
 
@@ -89,4 +89,21 @@ productRouter.put(
             res.status(404).send({ message: 'Product Not Found' })
         }
     }))
-export default productRouter;
+
+//delete product route 
+productRouter.delete(
+    '/:id',
+    isAuth,
+    isAdmin,
+    expressAsyncHandler(async (req, res) => {
+        const product = await Product.findById(req.params.id)
+        if (product) {
+            const deleteProduct = await product.remove()
+            res.send({ message: 'Product Deleted', product: deleteProduct })
+        } else {
+            res.status(404).send({ message: 'Product Not Found' })
+        }
+    })
+)
+
+export default productRouter
