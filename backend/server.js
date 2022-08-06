@@ -4,7 +4,8 @@ import dotenv from 'dotenv';
 import userRouter from './routers/userRouter.js';
 import productRouter from './routers/productRouter.js';
 import orderRouter from './routers/orderRouter.js';
-
+import uploadRouter from './routers/uploadRouter.js';
+import path from 'path';
 
 dotenv.config();
 
@@ -19,7 +20,10 @@ app.use(express.urlencoded({ extended: true }));
 
 mongoose.connect(process.env.MONGODB_URL || 'mongodb://127.0.0.1/amazona');
 
+// Upload an image route
+app.use('/api/uploads', uploadRouter)
 
+// Home page route
 app.get('/', (req, res) => {
     res.send('Server is ready');
 });
@@ -33,14 +37,25 @@ app.use('/api/users', userRouter);
 
 //Get products
 app.use('/api/products', productRouter);
+
 // Get the order products
 app.use('/api/orders', orderRouter);
 
 //Error catcher middleware
 // All errors will be redirected to this function 
-app.use((err, req, res) => {
+// app.use((err, req, res) => {
+//     res.status(500).send({ message: err.message });
+// });
+
+// TODO SOLVE THIS ISSUE
+// When next is removed res.statis is not a function appears in BE
+
+app.use((err, req, res, next) => {
     res.status(500).send({ message: err.message });
-})
+  });
+// Show images after an upload
+const __dirname = path.resolve();
+app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
 
 const port = process.env.PORT || 5000;
 

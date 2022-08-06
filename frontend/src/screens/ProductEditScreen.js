@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { detailsProduct, updateProduct } from '../actions/productActions';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
 import { PRODUCT_UPDATE_RESET } from '../constants/productConstants';
+import Axios from 'axios';
 
 export default function ProductEditScreen() {
 
@@ -81,6 +82,63 @@ export default function ProductEditScreen() {
             description
         }))
     }
+
+    // const [loadingUpload, setLoadingUpload] = useState(false)
+    // const [errorUpload, setErrorUpload] = useState('')
+
+    // const userSignin = useSelector(state => state.userSignin)
+    // const { userInfo } = userSignin
+
+
+    // const uploadFileHandler = async (e) => {
+    //     //ajax req to be to upload a file
+    //     const file = e.target.files[0]
+    //     //when u want to send a ajax req to upload a file u need to create an object of this class
+    //     const bodyFormData = new FormData()
+    //     // append file to the form named 'image
+    //     bodyFormData.append('image', file)
+    //     setLoadingUpload(true)
+    //     //send the ajax req
+    //     try {
+    //         const { data } = await Axios.post('/api/uploads', bodyFormData, {
+    //             //the be understand the req and get the file and uploads it
+    //             headers: {
+    //                 'Content-Type': 'multipart/form-data',
+    //                  Authorization: `Bearer ${userInfo.token}`,
+    //             }
+    //         })
+    //         setImage(data)
+    //         setLoadingUpload(false)
+    //     } catch (error) {
+    //         setErrorUpload(error.message)
+    //         setLoadingUpload(false)
+    //     }
+    // }
+
+    const [loadingUpload, setLoadingUpload] = useState(false);
+    const [errorUpload, setErrorUpload] = useState('');
+
+    const userSignin = useSelector((state) => state.userSignin);
+    const { userInfo } = userSignin;
+    const uploadFileHandler = async (e) => {
+        const file = e.target.files[0];
+        const bodyFormData = new FormData();
+        bodyFormData.append('image', file);
+        setLoadingUpload(true);
+        try {
+            const { data } = await Axios.post('/api/uploads', bodyFormData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${userInfo.token}`,
+                },
+            });
+            setImage(data);
+            setLoadingUpload(false);
+        } catch (error) {
+            setErrorUpload(error.message);
+            setLoadingUpload(false);
+        }
+    };
     return (
 
         <div>
@@ -125,8 +183,21 @@ export default function ProductEditScreen() {
                                     value={image}
                                     onChange={e => setImage(e.target.value)}
                                 ></input>
-                            </div>
 
+                            </div>
+                            <div>
+                                <label htmlFor="imageFile">Image File</label>
+                                <input
+                                    type="file"
+                                    id="imageFile"
+                                    label="Choose Image"
+                                    onChange={uploadFileHandler}
+                                ></input>
+                                {loadingUpload && <LoadingBox></LoadingBox>}
+                                {errorUpload && (
+                                    <MessageBox variant="danger">{errorUpload}</MessageBox>
+                                )}
+                            </div>
                             <div>
                                 <label htmlFor='category'>Category</label>
                                 <input
