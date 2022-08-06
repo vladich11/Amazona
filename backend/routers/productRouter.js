@@ -56,7 +56,37 @@ productRouter.post(
         //save the product in db
         const createdProduct = await product.save();
         //passing created product to fe
-        res.send({message: 'Product Created', product: createdProduct});
+        res.send({ message: 'Product Created', product: createdProduct });
     }))
 
+
+// Update product details
+
+productRouter.put(
+    '/:id',
+    isAuth,
+    isAdmin,
+    expressAsyncHandler(async (req, res) => {
+        // get id from url
+        const productId = req.params.id
+        //get product from db
+        const product = await Product.findById(productId)
+        //product exist
+        if (product) {
+            //fill product info by data from fe
+            product.name = req.body.name
+            product.price = req.body.price
+            product.image = req.body.image
+            product.category = req.body.category
+            product.brand = req.body.brand
+            product.countInStock = req.body.countInStock
+            product.description = req.body.description
+            //save new data
+            const updatedProduct = await product.save()
+            //send this object to fe
+            res.send({ message: 'Product Updated', product: updatedProduct })
+        } else {
+            res.status(404).send({ message: 'Product Not Found' })
+        }
+    }))
 export default productRouter;

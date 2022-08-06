@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import {  useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { detailsProduct } from '../actions/productActions';
+import { detailsProduct, updateProduct } from '../actions/productActions';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
 import { PRODUCT_UPDATE_RESET } from '../constants/productConstants';
 
 export default function ProductEditScreen() {
 
-    //const navigate = useNavigate();
+    const navigate = useNavigate();
 
     // get product id from url
     const params = useParams();
@@ -27,15 +27,28 @@ export default function ProductEditScreen() {
     const productDetails = useSelector(state => state.productDetails)
     const { loading, error, product } = productDetails
 
+    // get updated product details from redux store
+    const productUpdate = useSelector(state => state.productUpdate)
+    const {
+        loading: loadingUpdate,
+        error: errorUpdate,
+        success: successUpdate
+    } = productUpdate
+
     const dispatch = useDispatch();
     // Dispatch an action
     useEffect(() => {
+        // reset update if successUpdate exist
+        if (successUpdate) {
+            dispatch({ type: PRODUCT_UPDATE_RESET })
+            navigate('/productlist')
+        }
 
         // product exist => set values for hook
-        if (!product || (product._id !== productId)) { 
+        if (!product || (product._id !== productId || successUpdate)) {
             // if product is null we need to load it from BE
             dispatch(detailsProduct(productId))
-            
+
         } else {
             // else set fields with data from DB
             setName(product.name)
@@ -50,11 +63,23 @@ export default function ProductEditScreen() {
         product,
         dispatch,
         productId,
+        navigate,
+        successUpdate
     ])
 
     const submitHandler = e => {
-        e.preventDefualt();
-        // DISPATCH UPDATE PRODUCT
+        e.preventDefault();
+        // DISPATCH UPDATE PRODUCT action using a reducer
+        dispatch(updateProduct({
+            _id: productId,
+            name,
+            price,
+            image,
+            category,
+            brand,
+            countInStock,
+            description
+        }))
     }
     return (
 
@@ -63,6 +88,8 @@ export default function ProductEditScreen() {
                 <div>
                     <h1>Edit Product {productId}</h1>
                 </div>
+                {loadingUpdate && <LoadingBox></LoadingBox>}
+                {errorUpdate && <MessageBox variant='danger'>{errorUpdate}</MessageBox>}
                 {loading ? <LoadingBox></LoadingBox>
                     : error ? <MessageBox variant='danger'>{error}</MessageBox>
                         :
@@ -137,7 +164,7 @@ export default function ProductEditScreen() {
                                 <label htmlFor='description'>Description</label>
                                 <textarea
                                     id='description'
-                                    rows ="3"
+                                    rows="3"
                                     type='text'
                                     placeholder='Enter description'
                                     value={description}
