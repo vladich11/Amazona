@@ -1,13 +1,26 @@
 //express.router function
 import express from 'express'
-import expressAsyncHandler from 'express-async-handler';
-import Order from '../models/orderModel.js';
-import { isAuth } from '../utils.js';
+import expressAsyncHandler from 'express-async-handler'
+import Order from '../models/orderModel.js'
+import { isAdmin, isAuth } from '../utils.js'
 
 
 
 
-const orderRouter = express.Router();
+const orderRouter = express.Router()
+
+// Get all orders
+
+orderRouter.get(
+    '/',
+    isAuth,
+    isAdmin,
+    expressAsyncHandler(async (req, res) => {
+        // get the id of user and load the user info from user table/collection and only put the name of user from that collection (like sql join)
+      const orders = await Order.find({}).populate('user', 'name')
+      res.send(orders)
+    })
+  )
 
 //get order list for current user
 orderRouter.get('/mine', isAuth, expressAsyncHandler(async (req, res) => {
@@ -27,7 +40,7 @@ orderRouter.post(
     expressAsyncHandler(async (req, res) => {
         if (req.body.orderItems.length === 0) {
             //Client error / validation error
-            res.status(400).send({ message: 'Cart is empty' });
+            res.status(400).send({ message: 'Cart is empty' })
         }
         // The order is corret
         else {
@@ -41,11 +54,11 @@ orderRouter.post(
                 totalPrice: req.body.totalPrice,
                 // Define a middleware to get the user info that purchased this order
                 user: req.user._id,
-            });
+            })
             //Create that order in the DB      
-            const createdOrder = await order.save();
+            const createdOrder = await order.save()
             //pass the order to frontend
-            res.status(201).send({ message: 'New order created', order: createdOrder });
+            res.status(201).send({ message: 'New order created', order: createdOrder })
         }
     }))
 
@@ -53,9 +66,9 @@ orderRouter.post(
 // Get the details of the order 
 //expressAsyncHandler() handle errors in async functions  
 orderRouter.get('/:id', isAuth, expressAsyncHandler(async (req, res) => {
-    const order = await Order.findById(req.params.id);
+    const order = await Order.findById(req.params.id)
     if (order) {
-        res.send(order);
+        res.send(order)
     }
     else {
         res.status(404).send({ message: 'Order not Found!' })
@@ -64,10 +77,10 @@ orderRouter.get('/:id', isAuth, expressAsyncHandler(async (req, res) => {
 
 // Update the status othe resourse (which is order)
 orderRouter.put('/:id/pay', isAuth, expressAsyncHandler(async (req, res) => {
-    const order = await Order.findById(req.params.id);
+    const order = await Order.findById(req.params.id)
     if (order) {
-        order.isPaid = true;
-        order.paidAt = Date.now();
+        order.isPaid = true
+        order.paidAt = Date.now()
         order.paymentResult = {
             id: req.body.id,
             status: req.body.status,
@@ -75,7 +88,7 @@ orderRouter.put('/:id/pay', isAuth, expressAsyncHandler(async (req, res) => {
             email_address: req.body.email_address
         }
         // Save the order new details
-        const updatedOrder = await order.save();
+        const updatedOrder = await order.save()
         res.send({ message: 'Order Paid', order: updatedOrder })
 
     } else {
@@ -83,4 +96,4 @@ orderRouter.put('/:id/pay', isAuth, expressAsyncHandler(async (req, res) => {
     }
 }))
 
-export default orderRouter;
+export default orderRouter

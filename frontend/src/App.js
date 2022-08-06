@@ -17,6 +17,7 @@ import RegisterScreen from './screens/RegisterScreen';
 import ShippingAddressScreen from './screens/ShippingAddressScreen';
 import SigninScreen from './screens/SigninScreen';
 import ProductEditScreen from './screens/ProductEditScreen';
+import OrderListScreen from './screens/OrderListScreen';
 
 function App() {
 
@@ -119,6 +120,14 @@ function App() {
               element={
                 <AdminRoute>
                   <ProductListScreen />
+                </AdminRoute>
+              }
+            />
+             <Route
+              path="/orderlist"
+              element={
+                <AdminRoute>
+                  <OrderListScreen />
                 </AdminRoute>
               }
             />
