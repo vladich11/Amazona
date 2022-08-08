@@ -1,4 +1,7 @@
 import {
+    DELETE_ORDER_FAIL,
+    DELETE_ORDER_REQUEST,
+    DELETE_ORDER_SUCCESS,
     ORDER_CREATE_FAIL,
     ORDER_CREATE_REQUEST,
     ORDER_CREATE_SUCCESS,
@@ -126,19 +129,42 @@ export const listOrderMine = () => async (dispatch, getState) => {
 export const listOrders = () => async (dispatch, getState) => {
     dispatch({ type: ORDER_LIST_REQUEST })
     const {
-      userSignin: { userInfo },
+        userSignin: { userInfo },
     } = getState()
     try {
-      const { data } = await Axios.get('/api/orders', {
-        headers: { Authorization: `Bearer ${userInfo.token}` },
-      })
-      console.log(data)
-      dispatch({ type: ORDER_LIST_SUCCESS, payload: data })
+        const { data } = await Axios.get('/api/orders', {
+            headers: { Authorization: `Bearer ${userInfo.token}` },
+        })
+        console.log(data)
+        dispatch({ type: ORDER_LIST_SUCCESS, payload: data })
     } catch (error) {
-      const message =
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message
-      dispatch({ type: ORDER_LIST_FAIL, payload: message })
+        const message =
+            error.response && error.response.data.message
+                ? error.response.data.message
+                : error.message
+        dispatch({ type: ORDER_LIST_FAIL, payload: message })
     }
-  }
+}
+
+// Delete order
+
+export const deleteOrder = (orderId) => async (dispatch, getState) => {
+
+    dispatch({ type: DELETE_ORDER_REQUEST, payload: orderId })
+    const {
+        userSignin: { userInfo },
+    } = getState()
+
+    try {
+        const { data } = Axios.delete(`/api/orders/${orderId}`, {
+            headers: { Authorization: `Bearer ${userInfo.token}` },
+        })
+        dispatch({ type: DELETE_ORDER_SUCCESS , payload: data })
+    } catch (error) {
+        const message =
+            error.response && error.response.data.message
+                ? error.response.data.message
+                : error.message
+        dispatch({ type: DELETE_ORDER_FAIL, payload: message })
+    }
+}

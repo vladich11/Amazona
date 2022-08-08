@@ -25,7 +25,7 @@ productRouter.get(
     })
 )
 
-//Details product api
+// Get product Details  
 //If we place this api above /seed api will be treated as id 
 productRouter.get(
     '/:id',
@@ -59,9 +59,7 @@ productRouter.post(
         res.send({ message: 'Product Created', product: createdProduct })
     }))
 
-
 // Update product details
-
 productRouter.put(
     '/:id',
     isAuth,

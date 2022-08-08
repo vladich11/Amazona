@@ -1,4 +1,23 @@
-import { PRODUCT_CREATE_FAIL, PRODUCT_CREATE_REQUEST, PRODUCT_CREATE_RESET, PRODUCT_CREATE_SUCCESS, PRODUCT_DELETE_FAIL, PRODUCT_DELETE_REQUEST, PRODUCT_DELETE_RESET, PRODUCT_DELETE_SUCCESS, PRODUCT_DETAILS_FAIL, PRODUCT_DETAILS_REQUEST, PRODUCT_DETAILS_SUCCESS, PRODUCT_LIST_FAIL, PRODUCT_LIST_REQUEST, PRODUCT_LIST_SUCCESS, PRODUCT_UPDATE_FAIL, PRODUCT_UPDATE_REQUEST, PRODUCT_UPDATE_RESET, PRODUCT_UPDATE_SUCCESS } from "../constants/productConstants";
+import {
+    PRODUCT_CREATE_FAIL,
+    PRODUCT_CREATE_REQUEST,
+    PRODUCT_CREATE_RESET,
+    PRODUCT_CREATE_SUCCESS,
+    PRODUCT_DELETE_FAIL,
+    PRODUCT_DELETE_REQUEST,
+    PRODUCT_DELETE_RESET,
+    PRODUCT_DELETE_SUCCESS,
+    PRODUCT_DETAILS_FAIL,
+    PRODUCT_DETAILS_REQUEST,
+    PRODUCT_DETAILS_SUCCESS,
+    PRODUCT_LIST_FAIL,
+    PRODUCT_LIST_REQUEST,
+    PRODUCT_LIST_SUCCESS,
+    PRODUCT_UPDATE_FAIL,
+    PRODUCT_UPDATE_REQUEST,
+    PRODUCT_UPDATE_RESET,
+    PRODUCT_UPDATE_SUCCESS
+} from "../constants/productConstants";
 
 // Reducer is recieving a state 
 
@@ -17,7 +36,7 @@ export const productListReducer = (state = { loading: true, products: [] }, acti
     }
 };
 
-// Product details reducer
+// Get Product details reducer
 
 export const productDetailsReducer = (state = { loading: true }, action) => {
     switch (action.type) {
@@ -32,7 +51,7 @@ export const productDetailsReducer = (state = { loading: true }, action) => {
     }
 };
 
-// Product create reducer
+// Create Product reducer
 export const productCreateReducer = (state = {}, action) => {
     switch (action.type) {
         case PRODUCT_CREATE_REQUEST:
@@ -67,15 +86,15 @@ export const productUpdateReducer = (state = {}, action) => {
 
 export const productDeleteReducer = (state = {}, action) => {
     switch (action.type) {
-      case PRODUCT_DELETE_REQUEST:
-        return { loading: true };
-      case PRODUCT_DELETE_SUCCESS:
-        return { loading: false, success: true };
-      case PRODUCT_DELETE_FAIL:
-        return { loading: false, error: action.payload };
-      case PRODUCT_DELETE_RESET:
-        return {};
-      default:
-        return state;
+        case PRODUCT_DELETE_REQUEST:
+            return { loading: true };
+        case PRODUCT_DELETE_SUCCESS:
+            return { loading: false, success: true };
+        case PRODUCT_DELETE_FAIL:
+            return { loading: false, error: action.payload };
+        case PRODUCT_DELETE_RESET:
+            return {};
+        default:
+            return state;
     }
-  };
+};

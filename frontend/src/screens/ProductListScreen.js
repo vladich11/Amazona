@@ -64,6 +64,7 @@ export default function ProductListScreen() {
             {loadingDelete && <LoadingBox></LoadingBox>}
             {errorDelete && <MessageBox variant="danger">{errorDelete}</MessageBox>}
 
+            {/* // TODO FIX INIFINITE LOADING  */}
             {loadingCreate && <LoadingBox></LoadingBox>}
             {errorCreate && <MessageBox variant="danger">{errorCreate}</MessageBox>}
 
