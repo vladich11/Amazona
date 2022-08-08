@@ -2,6 +2,9 @@ import {
     DELETE_ORDER_FAIL,
     DELETE_ORDER_REQUEST,
     DELETE_ORDER_SUCCESS,
+    DELIVER_ORDER_FAIL,
+    DELIVER_ORDER_REQUEST,
+    DELIVER_ORDER_SUCCESS,
     ORDER_CREATE_FAIL,
     ORDER_CREATE_REQUEST,
     ORDER_CREATE_SUCCESS,
@@ -166,5 +169,27 @@ export const deleteOrder = (orderId) => async (dispatch, getState) => {
                 ? error.response.data.message
                 : error.message
         dispatch({ type: DELETE_ORDER_FAIL, payload: message })
+    }
+}
+// Deliver an order
+
+export const deliverOrder = (orderId) => async (dispatch, getState) => {
+    dispatch({ type: DELIVER_ORDER_REQUEST, payload: orderId })
+    // GET USER INFO
+    const { userSignin: { userInfo } } = getState()
+    //ajax req
+    try {
+        // ajax req
+        // Calling pay api
+        const { data } = Axios.put(`/api/orders/${orderId}/deliver`,{}, {
+            headers: { Authorization: `Bearer ${userInfo.token}` }
+        })
+
+        dispatch({ type: DELIVER_ORDER_SUCCESS, payload: data })
+    } catch (error) {
+        const message = error.response && error.response.data.message ?
+            error.response.data.message :
+            error.message
+        dispatch({ type: DELIVER_ORDER_FAIL, payload: message })
     }
 }

@@ -17,10 +17,10 @@ orderRouter.get(
     isAdmin,
     expressAsyncHandler(async (req, res) => {
         // get the id of user and load the user info from user table/collection and only put the name of user from that collection (like sql join)
-      const orders = await Order.find({}).populate('user', 'name')
-      res.send(orders)
+        const orders = await Order.find({}).populate('user', 'name')
+        res.send(orders)
     })
-  )
+)
 
 //get order list for current user
 orderRouter.get('/mine', isAuth, expressAsyncHandler(async (req, res) => {
@@ -113,5 +113,24 @@ orderRouter.delete(
         }
     })
 )
+
+
+// Deliver order
+
+orderRouter.put(
+    '/:id/deliver',
+    isAuth,
+    expressAsyncHandler(async (req, res) => {
+        const order = await Order.findById(req.params.id)
+        if (order) {
+            order.isDelivered = true
+            order.deliveredAt = Date.now()
+            const updatedOrder = await order.save()
+            res.send({ message: 'Order Delivered', order: updatedOrder })
+
+        } else {
+            res.status(404).send({ message: 'Order not Found' })
+        }
+    }))
 
 export default orderRouter

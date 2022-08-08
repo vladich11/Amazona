@@ -3,6 +3,10 @@ import {
     DELETE_ORDER_REQUEST,
     DELETE_ORDER_RESET,
     DELETE_ORDER_SUCCESS,
+    DELIVER_ORDER_FAIL,
+    DELIVER_ORDER_REQUEST,
+    DELIVER_ORDER_RESET,
+    DELIVER_ORDER_SUCCESS,
     ORDER_CREATE_FAIL,
     ORDER_CREATE_REQUEST,
     ORDER_CREATE_RESET,
@@ -102,3 +106,18 @@ export const orderDeleteReducer = (state = {}, action) => {
         return state;
     }
   }
+
+  export const orderDeliverReducer = (state = {}, action) => {
+    switch (action.type) {
+        case DELIVER_ORDER_REQUEST:
+            return { loading: true }
+        case DELIVER_ORDER_SUCCESS:
+            return { loading: false, success: true }
+        case DELIVER_ORDER_FAIL:
+            return { loading: false, error: action.payload };
+        case DELIVER_ORDER_RESET:
+            return {};
+        default:
+            return state;
+    }
+}

@@ -3,10 +3,10 @@ import { PayPalButton } from 'react-paypal-button-v2'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector, } from 'react-redux'
 import { Link, useParams } from 'react-router-dom'
-import { detailsOrder, payOrder } from '../actions/orderActions'
+import { deliverOrder, detailsOrder, payOrder } from '../actions/orderActions'
 import LoadingBox from '../components/LoadingBox'
 import MessageBox from '../components/MessageBox'
-import { ORDER_PAY_RESET } from '../constants/orderConstants';
+import { DELIVER_ORDER_RESET, ORDER_PAY_RESET } from '../constants/orderConstants';
 
 export default function OrderScreen() {
 
@@ -20,9 +20,18 @@ export default function OrderScreen() {
     const orderDetails = useSelector(state => state.orderDetails);
     const { order, loading, error } = orderDetails;
 
+    //get userInfo from redux store
+    const userSignin = useSelector(state => state.userSignin)
+    const {userInfo} = userSignin
+
     // fetch orderPay from redux store (redux part)
     const orderPay = useSelector(state => state.orderPay);
     const { loading: loadingPay, error: errorPay, success: successPay } = orderPay;
+
+    // fetch orderDeliver from redux store (redux part)
+    const orderDeliver = useSelector(state => state.orderDeliver);
+    const { loading: loadingDeliver, error: erroreliver, success: successeDeliver } = orderDeliver;
+    
     const dispatch = useDispatch();
 
     // When there in a change in order, orderId, sdkReady this function will run
@@ -43,8 +52,9 @@ export default function OrderScreen() {
             document.body.appendChild(script);
         }
         // order not loaded,  user paid for item , order exist yet not equals to the orderID(in the url)
-        if (!order || successPay || (order && order._id !== orderId)) {
+        if (!order || successPay || successeDeliver|| (order && order._id !== orderId)) {
             dispatch({ type: ORDER_PAY_RESET })
+            dispatch({ type: DELIVER_ORDER_RESET })
             //load order from be
             // when successPay is true the page is needed to be refreshed
             dispatch(detailsOrder(orderId))
@@ -59,13 +69,18 @@ export default function OrderScreen() {
             }
         }
 
-    }, [dispatch, order, orderId, sdkReady, successPay]);
+    }, [dispatch, order, orderId, sdkReady, successPay, successeDeliver]);
 
 
     const successPaymentHandler = paymentResult => {
         // payment result is the result of palpal
         // This function is coming from order actions
         dispatch(payOrder(order, paymentResult))
+    }
+
+    // Deliver handler
+    const deliverHandler = () => {
+        dispatch(deliverOrder(order._id))
     }
 
     return loading ? (<LoadingBox></LoadingBox>) :
@@ -179,6 +194,13 @@ export default function OrderScreen() {
                                                             </PayPalButton>
                                                         </>
                                                     )}
+                                            </li>
+                                        )
+                                    }
+                                    {
+                                        userInfo.isAdmin && order.isPaid && !order.isDelivered && (
+                                            <li>
+                                                <button type='button' className='primary block' onClick={deliverHandler}>Deliver Order </button>
                                             </li>
                                         )
                                     }
