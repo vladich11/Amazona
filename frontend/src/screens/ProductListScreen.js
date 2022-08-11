@@ -12,7 +12,7 @@ export default function ProductListScreen() {
     const productList = useSelector((state) => state.productList)
     const { loading, error, products } = productList
 
-    // get data from productCreate from redux store
+    // Get data from productCreate from redux store
     const productCreate = useSelector((state) => state.productCreate)
     const {
         loading: loadingCreate,

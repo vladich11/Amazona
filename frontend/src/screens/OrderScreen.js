@@ -10,25 +10,25 @@ import { DELIVER_ORDER_RESET, ORDER_PAY_RESET } from '../constants/orderConstant
 
 export default function OrderScreen() {
 
-    //hook for getting the status of paypal SDK
+    // Hook for getting the status of paypal SDK
     const [sdkReady, setSdkReady] = useState(false);
 
     const params = useParams();
     const { id: orderId } = params;
 
-    /// fetch orderDeatils from redux store (redux part)
+    /// Fetch orderDeatils from redux store 
     const orderDetails = useSelector(state => state.orderDetails);
     const { order, loading, error } = orderDetails;
 
-    //get userInfo from redux store
+    // Get userInfo from redux store
     const userSignin = useSelector(state => state.userSignin)
     const {userInfo} = userSignin
 
-    // fetch orderPay from redux store (redux part)
+    // Fetch orderPay from redux store 
     const orderPay = useSelector(state => state.orderPay);
     const { loading: loadingPay, error: errorPay, success: successPay } = orderPay;
 
-    // fetch orderDeliver from redux store (redux part)
+    // Fetch orderDeliver from redux store 
     const orderDeliver = useSelector(state => state.orderDeliver);
     const { loading: loadingDeliver, error: erroreliver, success: successeDeliver } = orderDeliver;
     
@@ -36,34 +36,34 @@ export default function OrderScreen() {
 
     // When there in a change in order, orderId, sdkReady this function will run
     useEffect(() => {
-        // async becouse it send a req to BE TO GET THE CLIENT id
+        // Async becouse it send a req to BE TO GET THE CLIENT id
         const addPayPalScript = async () => {
             const { data } = await Axios.get('/api/config/paypal');
-            // scrpt element set the sourse of elemnet to the paypal SDK
+            // Script element set the sourse of elemnet to the paypal SDK
             const script = document.createElement('script');
             script.type = "text/javascript"
             script.src = `https://www.paypal.com/sdk/js?client-id=${data}`
             script.async = true;
-            //onload happens when this script is done loading into the browser
+            // Onload happens when this script is done loading into the browser
             script.onload = () => {
                 setSdkReady(true);
             }
-            // all code will become last child of body 
+            // All code will become last child of body 
             document.body.appendChild(script);
         }
-        // order not loaded,  user paid for item , order exist yet not equals to the orderID(in the url)
+        // Order not loaded,  user paid for item , order exist yet not equals to the orderID(in the url)
         if (!order || successPay || successeDeliver|| (order && order._id !== orderId)) {
             dispatch({ type: ORDER_PAY_RESET })
             dispatch({ type: DELIVER_ORDER_RESET })
-            //load order from be
-            // when successPay is true the page is needed to be refreshed
+            // Load order from be
+            // When successPay is true the page is needed to be refreshed
             dispatch(detailsOrder(orderId))
         } else {
             if (!order.isPaid) {
                 if (!window.paypal) {
                     addPayPalScript();
                 } else {
-                    // unpaid order and paypal is already loaded
+                    // Unpaid order and paypal is already loaded
                     setSdkReady(true);
                 }
             }
@@ -73,7 +73,7 @@ export default function OrderScreen() {
 
 
     const successPaymentHandler = paymentResult => {
-        // payment result is the result of palpal
+        // Payment result is the result of palpal
         // This function is coming from order actions
         dispatch(payOrder(order, paymentResult))
     }

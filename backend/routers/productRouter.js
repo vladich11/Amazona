@@ -6,27 +6,28 @@ import { isAdmin, isAuth } from "../utils.js"
 const productRouter = express.Router()
 
 
-// Get all products for homepage
-//Empty object means get all the products
+// Get products 
 productRouter.get(
     '/',
     expressAsyncHandler(async (req, res) => {
+        //Empty object means get all the products
         const products = await Product.find({})
         res.send(products)
     })
 )
 
+
+// Seed DB with products
 productRouter.get(
     '/seed',
     expressAsyncHandler(async (req, res) => {
-        //await Product.remove({})
         const createdProducts = await Product.insertMany(data.products)
         res.send({ createdProducts })
     })
 )
 
+
 // Get product Details  
-//If we place this api above /seed api will be treated as id 
 productRouter.get(
     '/:id',
     expressAsyncHandler(async (req, res) => {
@@ -35,7 +36,8 @@ productRouter.get(
 
     }))
 
-// Create products /api/products
+
+// Create products
 productRouter.post(
     '/',
     isAuth,
@@ -58,6 +60,7 @@ productRouter.post(
         //passing created product to fe
         res.send({ message: 'Product Created', product: createdProduct })
     }))
+
 
 // Update product details
 productRouter.put(
@@ -88,7 +91,8 @@ productRouter.put(
         }
     }))
 
-//delete product route 
+
+//delete product  
 productRouter.delete(
     '/:id',
     isAuth,

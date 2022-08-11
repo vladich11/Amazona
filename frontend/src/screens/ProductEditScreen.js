@@ -24,11 +24,11 @@ export default function ProductEditScreen() {
     const [brand, setBrand] = useState('')
     const [description, setDescription] = useState('')
 
-    // get product details from redux store
+    // Get product details from redux store
     const productDetails = useSelector(state => state.productDetails)
     const { loading, error, product } = productDetails
 
-    // get updated product details from redux store
+    // Get updated product details from redux store
     const productUpdate = useSelector(state => state.productUpdate)
     const {
         loading: loadingUpdate,
@@ -39,19 +39,19 @@ export default function ProductEditScreen() {
     const dispatch = useDispatch();
     // Dispatch an action
     useEffect(() => {
-        // reset update if successUpdate exist
+        // Reset update if successUpdate exist
         if (successUpdate) {
             dispatch({ type: PRODUCT_UPDATE_RESET })
             navigate('/productlist')
         }
 
-        // product exist => set values for hook
+        // Product exist => set values for hook
         if (!product || (product._id !== productId || successUpdate)) {
-            // if product is null we need to load it from BE
+            // If product is null we need to load it from BE
             dispatch(detailsProduct(productId))
 
         } else {
-            // else set fields with data from DB
+            // Set fields with data from DB
             setName(product.name)
             setPrice(product.price)
             setImage(product.image)
@@ -70,7 +70,7 @@ export default function ProductEditScreen() {
 
     const submitHandler = e => {
         e.preventDefault();
-        // DISPATCH UPDATE PRODUCT action using a reducer
+        // Dispatch update product action using a reducer
         dispatch(updateProduct({
             _id: productId,
             name,
@@ -83,50 +83,23 @@ export default function ProductEditScreen() {
         }))
     }
 
-    // const [loadingUpload, setLoadingUpload] = useState(false)
-    // const [errorUpload, setErrorUpload] = useState('')
-
-    // const userSignin = useSelector(state => state.userSignin)
-    // const { userInfo } = userSignin
-
-
-    // const uploadFileHandler = async (e) => {
-    //     //ajax req to be to upload a file
-    //     const file = e.target.files[0]
-    //     //when u want to send a ajax req to upload a file u need to create an object of this class
-    //     const bodyFormData = new FormData()
-    //     // append file to the form named 'image
-    //     bodyFormData.append('image', file)
-    //     setLoadingUpload(true)
-    //     //send the ajax req
-    //     try {
-    //         const { data } = await Axios.post('/api/uploads', bodyFormData, {
-    //             //the be understand the req and get the file and uploads it
-    //             headers: {
-    //                 'Content-Type': 'multipart/form-data',
-    //                  Authorization: `Bearer ${userInfo.token}`,
-    //             }
-    //         })
-    //         setImage(data)
-    //         setLoadingUpload(false)
-    //     } catch (error) {
-    //         setErrorUpload(error.message)
-    //         setLoadingUpload(false)
-    //     }
-    // }
-
     const [loadingUpload, setLoadingUpload] = useState(false);
     const [errorUpload, setErrorUpload] = useState('');
 
     const userSignin = useSelector((state) => state.userSignin);
     const { userInfo } = userSignin;
     const uploadFileHandler = async (e) => {
+        // Ajax req to be to upload a file
         const file = e.target.files[0];
+        // When u want to send a ajax req to upload a file u need to create an object of this class
         const bodyFormData = new FormData();
+        // Append file to the form named 'image
         bodyFormData.append('image', file);
         setLoadingUpload(true);
+        // Send the ajax req
         try {
             const { data } = await Axios.post('/api/uploads', bodyFormData, {
+                // The be understand the req and get the file and uploads it
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     Authorization: `Bearer ${userInfo.token}`,

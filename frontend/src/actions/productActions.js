@@ -17,7 +17,8 @@ import {
     PRODUCT_DELETE_FAIL
 } from "../constants/productConstants"
 
-// Products list action
+
+// Get Products list 
 export const listProducts = () => async (dispatch) => {
     dispatch({
         type: PRODUCT_LIST_REQUEST
@@ -30,8 +31,7 @@ export const listProducts = () => async (dispatch) => {
     }
 }
 
-// Products details action
-
+// Get Products details 
 export const detailsProduct = (productId) => async (dispatch) => {
     dispatch({ type: PRODUCT_DETAILS_REQUEST, payload: productId })
 
@@ -50,22 +50,23 @@ export const detailsProduct = (productId) => async (dispatch) => {
     }
 }
 
-//Create product
+
+// Create product
 export const createProduct = () => async (dispatch, getState) => {
-    //dispatch product create req
+    // Dispatch product create req
     dispatch({ type: PRODUCT_CREATE_REQUEST })
-    //GET USER INFO from userSignin
+    // Get user info from userSignin
     const { userSignin: { userInfo } } = getState()
-    //ajax req
+    // Ajax req
     try {
-        //ajax req
+        // Ajax req
         const { data } = await Axios.post('/api/products', {},
             {
                 headers: { Authorization: `Bearer ${userInfo.token}` }
             })
         dispatch({
             type: PRODUCT_CREATE_SUCCESS,
-            //data.product is the object coming from the productRouter (product:createdProduct)
+            // data.product is the object coming from the productRouter (product:createdProduct)
             payload: data.product
         })
     } catch (error) {
@@ -76,15 +77,14 @@ export const createProduct = () => async (dispatch, getState) => {
     }
 }
 
-// Update product used in admin edit screen
 
+// Update product used in admin edit screen
 export const updateProduct = product => async (dispatch, getState) => {
     dispatch({ type: PRODUCT_UPDATE_REQUEST, payload: product })
-
-    // getting tken from userSignin
+    // Get token from userSignin 
     const { userSignin: { userInfo } } = getState()
     try {
-        //ajax req
+        // Ajax req
         const { data } = await Axios.put(`/api/products/${product._id}`, product, {
             headers: { Authorization: `Bearer ${userInfo.token}` }
         })
@@ -96,6 +96,7 @@ export const updateProduct = product => async (dispatch, getState) => {
         dispatch({ type: PRODUCT_UPDATE_FAIL, error: message })
     }
 }
+
 
 // Delete product from product list
 export const deleteProduct = (productId) => async (dispatch, getState) => {

@@ -6,36 +6,42 @@ import MessageBox from '../components/MessageBox';
 
 export default function CartScreen() {
 
+    // useNavigation is a hook which gives access to navigation object.
     const navigate = useNavigate();
 
+    // The useParams hook returns an object of key/value pairs of the dynamic params from the current URL that were matched by the <Route path> 
     const params = useParams();
     const { id: productId } = params;
 
-
-    //get qty from url
+    // This hook returns the current location object.
     const { search } = useLocation();
+
+    // Get qty from url
     const qtyInUrl = new URLSearchParams(search).get('qty');
     const qty = qtyInUrl ? Number(qtyInUrl) : 1;
 
-    // get cart from redux store
+    // Get cart from redux store
     const cart = useSelector(state => state.cart);
-    // fetch cartitems from cart
+    // Fetch cartitems from cart
     const { cartItems } = cart;
 
+    // This hook returns a reference to the dispatch function from the Redux store
     const dispatch = useDispatch();
+
+    // If productId exist add to cart
     useEffect(() => {
         if (productId)
             dispatch(addToCart(productId, qty));
-
-        // auto added to the depndencie list in useffect 
     }, [dispatch, productId, qty]);
 
 
+    // Remove product from cart handler
     const removeFromCartHandler = id => {
-        //delete action item from cart 
+        // Delete action item from cart 
         dispatch(removeFromCart(id));
     }
 
+    // Checkout handler - if user not signin redirect to signin else shipping screen
     const checkoutHandler = () => {
         navigate('/signin?redirect=/shipping');
     };

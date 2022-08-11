@@ -9,9 +9,11 @@ import { DELETE_ORDER_RESET } from '../constants/orderConstants'
 export default function OrderListScreen(props) {
 
     const navigate = useNavigate()
+
     const orderList = useSelector((state) => state.orderList)
     const { loading, error, orders } = orderList
 
+    
     const orderDelete = useSelector((state) => state.orderDelete);
     const {
         loading: loadingDelete,
@@ -20,10 +22,14 @@ export default function OrderListScreen(props) {
     } = orderDelete;
 
     const dispatch = useDispatch()
+
+    // When an order is deleted dispatch a reset + updated order list
     useEffect(() => {
         dispatch({ type: DELETE_ORDER_RESET });
         dispatch(listOrders())
     }, [dispatch,successDelete])
+
+    // Delete order handler
     const deleteHandler = (order) => {
         if (window.confirm('Are you sure to delete?')) {
             dispatch(deleteOrder(order._id));

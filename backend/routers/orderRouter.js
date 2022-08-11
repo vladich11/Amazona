@@ -9,8 +9,7 @@ import { isAdmin, isAuth } from '../utils.js'
 
 const orderRouter = express.Router()
 
-// Get all orders
-
+// Get all orders list
 orderRouter.get(
     '/',
     isAuth,
@@ -22,7 +21,8 @@ orderRouter.get(
     })
 )
 
-//get order list for current user
+
+// Order list for current user
 orderRouter.get('/mine', isAuth, expressAsyncHandler(async (req, res) => {
     //get orders from order model
     // await becouse find function returns a promise but we want the real orders not the promise
@@ -31,8 +31,7 @@ orderRouter.get('/mine', isAuth, expressAsyncHandler(async (req, res) => {
 }))
 
 
-// create a post request api
-// the root is /api/orders
+// Create new order
 orderRouter.post(
     '/',
     //Middleware 
@@ -61,10 +60,9 @@ orderRouter.post(
             res.status(201).send({ message: 'New order created', order: createdOrder })
         }
     }))
+    
 
-
-// Get the details of the order 
-//expressAsyncHandler() handle errors in async functions  
+//  Order details
 orderRouter.get('/:id', isAuth, expressAsyncHandler(async (req, res) => {
     const order = await Order.findById(req.params.id)
     if (order) {
@@ -75,7 +73,8 @@ orderRouter.get('/:id', isAuth, expressAsyncHandler(async (req, res) => {
     }
 }))
 
-// Update the status othe resourse (which is order)
+
+// Pay order
 orderRouter.put('/:id/pay', isAuth, expressAsyncHandler(async (req, res) => {
     const order = await Order.findById(req.params.id)
     if (order) {
@@ -87,7 +86,6 @@ orderRouter.put('/:id/pay', isAuth, expressAsyncHandler(async (req, res) => {
             update_time: req.body.update_time,
             email_address: req.body.email_address
         }
-        // Save the order new details
         const updatedOrder = await order.save()
         res.send({ message: 'Order Paid', order: updatedOrder })
 
@@ -98,7 +96,6 @@ orderRouter.put('/:id/pay', isAuth, expressAsyncHandler(async (req, res) => {
 
 
 // Delete order
-
 orderRouter.delete(
     '/:id',
     isAuth,
@@ -116,7 +113,6 @@ orderRouter.delete(
 
 
 // Deliver order
-
 orderRouter.put(
     '/:id/deliver',
     isAuth,

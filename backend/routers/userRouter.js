@@ -7,17 +7,17 @@ import { generateToken, isAuth } from '../utils.js';
 
 const userRouter = express.Router();
 
+// Seed DB with users 
 userRouter.get(
     '/seed',
     expressAsyncHandler(async (req, res) => {
-        // await User.remove({});
         const createdUsers = await User.insertMany(data.users);
         res.send({ createdUsers });
     })
 );
 
-// sign in route
-// when we are return sign in data we generate a token to auth the user for next req 
+
+// User signin 
 userRouter.post('/signin', expressAsyncHandler(async (req, res) => {
     const user = await User.findOne({ email: req.body.email });
     if (user) {
@@ -27,6 +27,7 @@ userRouter.post('/signin', expressAsyncHandler(async (req, res) => {
                 name: user.name,
                 email: user.email,
                 isAdmin: user.isAdmin,
+                // when the return signin data we generate a token to auth the user for next req 
                 token: generateToken(user)
             });
             return;
@@ -37,8 +38,8 @@ userRouter.post('/signin', expressAsyncHandler(async (req, res) => {
 })
 );
 
-//Register route
 
+// Register user
 userRouter.post('/register', expressAsyncHandler(async (req, res) => {
     const user = new User({
         name: req.body.name,
@@ -59,7 +60,6 @@ userRouter.post('/register', expressAsyncHandler(async (req, res) => {
 
 
 // User details
-
 userRouter.get('/:id', expressAsyncHandler(async (req, res) => {
     const user = await User.findById(req.params.id)
     if (user) {
@@ -69,6 +69,8 @@ userRouter.get('/:id', expressAsyncHandler(async (req, res) => {
     }
 }))
 
+
+// User profile
 userRouter.put('/profile', isAuth, expressAsyncHandler(async (req, res) => {
     // get user from DB
     const user = await User.findById(req.user._id)

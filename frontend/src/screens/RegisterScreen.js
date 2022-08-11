@@ -9,22 +9,23 @@ import MessageBox from '../components/MessageBox';
 export default function RegisterScreen() {
 
     const navigate = useNavigate();
+
     const [email, setEmail] = useState('');
     const [name, setName] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
-    //redirect 
     const { search } = useLocation();
     const redirectInUrl = new URLSearchParams(search).get('redirect');
     const redirect = redirectInUrl ? redirectInUrl : '/';
 
-    // get user sign from store
+    // Get user sign from store
     const userRegister = useSelector((state) => state.userRegister);
     const { userInfo, loading, error } = userRegister;
 
-    //get dispatch from use dispatch hook in react redux
+   
     const dispatch = useDispatch();
+
     const submitHandler = e => {
         // When user click on sign in button this form will not refresh(use ajax req instead)
         e.preventDefault();
@@ -33,6 +34,7 @@ export default function RegisterScreen() {
         else
             dispatch(register(name, email, password));
     };
+    
     // When userInfo is changed this funv will run
     useEffect(() => {
         if (userInfo) {

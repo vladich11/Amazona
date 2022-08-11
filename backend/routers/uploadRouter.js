@@ -5,7 +5,7 @@ import { isAuth } from '../utils.js'
 
 const uploadRouter = express.Router()
 
-// using storage on local project for images
+// Using storage on local project for images
 const storage = multer.diskStorage({
     destination(req, file, cb) {
         //callback , name of saving folder
@@ -17,35 +17,15 @@ const storage = multer.diskStorage({
     }
 })
 
-//define upload middleware
+
+// Define upload middleware
 const upload = multer({ storage })
 
-// multer is expecting a single file named image
+
+// Upload image
 uploadRouter.post('/', isAuth, upload.single('image'), (req, res) => {
+    // multer is expecting a single file named image
     res.send(`/${req.file.path}`)
 })
 
 export default uploadRouter
-
-// import multer from 'multer';
-// import express from 'express';
-// import { isAuth } from '../utils.js';
-
-// const uploadRouter = express.Router();
-
-// const storage = multer.diskStorage({
-//     destination(req, file, cb) {
-//         cb(null, 'uploads/');
-//     },
-//     filename(req, file, cb) {
-//         cb(null, `${Date.now()}.jpg`);
-//     },
-// });
-
-// const upload = multer({ storage });
-
-// uploadRouter.post('/', isAuth, upload.single('image'), (req, res) => {
-//     res.send(`/${req.file.path}`);
-// });
-
-// export default uploadRouter;

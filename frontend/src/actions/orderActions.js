@@ -26,6 +26,7 @@ import Axios from 'axios'
 import { CART_EMPTY } from "../constants/cartConstants"
 
 
+// Create order
 export const createOrder = order => async (dispatch, getState) => {
     dispatch({ type: ORDER_CREATE_REQUEST, payload: order })
     // ajax req
@@ -58,19 +59,18 @@ export const createOrder = order => async (dispatch, getState) => {
 }
 
 // Get order details
-// getState get the token of the current user
-
 export const detailsOrder = orderId => async (dispatch, getState) => {
+    // getState get the token of the current user
     dispatch({ type: ORDER_DETAILS_REQUEST, payload: orderId })
-    // from userSignin in redux store get user info
+    // From userSignin in redux store get user info
     const { userSignin: { userInfo } } = getState()
-    //ajax req
+    // Ajax req
     try {
         // ajax req
         const { data } = await Axios.get(`/api/orders/${orderId}`, {
             headers: { Authorization: `Bearer ${userInfo.token}` }
         })
-        // the data is the order details
+    
         dispatch({ type: ORDER_DETAILS_SUCCESS, payload: data })
     } catch (error) {
         const message =
@@ -81,15 +81,15 @@ export const detailsOrder = orderId => async (dispatch, getState) => {
     }
 }
 
-// Pay on order
 
+// Pay on order
 export const payOrder = (order, paymentResult) => async (dispatch, getState) => {
     dispatch({ type: ORDER_PAY_REQUEST, payload: { order, paymentResult } })
-    // GET USER INFO
+    // Get user info
     const { userSignin: { userInfo } } = getState()
-    //ajax req
+    // Ajax req
     try {
-        // ajax req
+        // Ajax req
         // Calling pay api
         const { data } = Axios.put(`/api/orders/${order._id}/pay`, paymentResult, {
             headers: { Authorization: `Bearer ${userInfo.token}` }
@@ -104,14 +104,14 @@ export const payOrder = (order, paymentResult) => async (dispatch, getState) => 
     }
 }
 
-// get user history purchase list
 
+// Get user history purchase list
 export const listOrderMine = () => async (dispatch, getState) => {
     dispatch({ type: ORDER_MINE_LIST_REQUEST })
-    // get user info
+    // Get user info
     const { userSignin: { userInfo } } = getState()
     try {
-        //ajax req
+        // Ajax req
         const { data } = await Axios.get('/api/orders/mine', {
             headers: {
                 Authorization: `Bearer ${userInfo.token}`
@@ -127,8 +127,8 @@ export const listOrderMine = () => async (dispatch, getState) => {
     }
 }
 
-// Get all order list
 
+// Get all order list
 export const listOrders = () => async (dispatch, getState) => {
     dispatch({ type: ORDER_LIST_REQUEST })
     const {
@@ -149,8 +149,8 @@ export const listOrders = () => async (dispatch, getState) => {
     }
 }
 
-// Delete order
 
+// Delete order
 export const deleteOrder = (orderId) => async (dispatch, getState) => {
 
     dispatch({ type: DELETE_ORDER_REQUEST, payload: orderId })
@@ -171,15 +171,16 @@ export const deleteOrder = (orderId) => async (dispatch, getState) => {
         dispatch({ type: DELETE_ORDER_FAIL, payload: message })
     }
 }
-// Deliver an order
 
+
+// Deliver an order
 export const deliverOrder = (orderId) => async (dispatch, getState) => {
     dispatch({ type: DELIVER_ORDER_REQUEST, payload: orderId })
-    // GET USER INFO
+    // Get user info
     const { userSignin: { userInfo } } = getState()
-    //ajax req
+    // Ajax req
     try {
-        // ajax req
+        // Ajax req
         // Calling pay api
         const { data } = Axios.put(`/api/orders/${orderId}/deliver`,{}, {
             headers: { Authorization: `Bearer ${userInfo.token}` }

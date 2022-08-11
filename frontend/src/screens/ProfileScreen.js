@@ -14,24 +14,26 @@ export default function ProfileScreen() {
 
     // get user updated info from redux store
     const userUpdateProfile = useSelector(state => state.userUpdateProfile)
-    //rename error to errorUpdate, rename loading to loadingUpdate
+
+    // Rename error to errorUpdate, rename loading to loadingUpdate
     const { success: successUpdate, error: errorUpdate, loading: loadingUpdate } = userUpdateProfile
-    //get user ID from redux store
+
+    // Get user ID from redux store
     const userSignin = useSelector(state => state.userSignin)
+
     // from userSign in get the user info
     const { userInfo } = userSignin
 
-    //GET USER DETAILS FROM REDUX STORE
+    // Get user details from redux store
     const userDetails = useSelector(state => state.userDetails)
-    // from userDetails in get the user Details
+    // From userDetails in get the user details
     const { loading, error, user } = userDetails
 
     const dispatch = useDispatch()
 
-
     const submitHandler = (e) => {
         e.preventDefault();
-        //dispatch update profile
+        // Dispatch update profile
         if (password !== confirmPassword) {
             alert('password and Confirm Password do not Match!')
         } else {
@@ -39,14 +41,14 @@ export default function ProfileScreen() {
         }
     }
 
-    // dispatch user details action
-    // reset succesUpdate when we open the screen for the second time
+    // Dispatch user details action
+    // Reset succesUpdate when we open the screen for the second time
     useEffect(() => {
         if (!user) {
             dispatch({type: USER_UPDATE_PROFILE_RESET})
             dispatch(detailsUser(userInfo._id))
         } else {
-            // fill variables with data from BE
+            // Fill variables with data from BE
             setName(user.name)
             setEmail(user.email)
         }

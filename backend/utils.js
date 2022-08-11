@@ -15,8 +15,8 @@ export const generateToken = user => {
     );
 };
 
-//Middleware to auth user
 
+// Middleware to auth user
 export const isAuth = (req, res, next) => {
     // Get the auth field from headers of this req
     const authorization = req.headers.authorization;
@@ -45,8 +45,8 @@ export const isAuth = (req, res, next) => {
     }
 };
 
-// middleware TO PROTECT THE admin route in BE (api)
 
+// middleware to protect admin route in BE (api)
 export const isAdmin = (req, res,next) => {
     if(req.user && req.user.isAdmin){
         //pass to the next middleware // ok

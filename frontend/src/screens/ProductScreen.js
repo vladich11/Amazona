@@ -22,7 +22,7 @@ export default function ProductScreen(props) {
 
     // Redirect user to cart screen
     const addToCartHandler = () => {
-        //This function change the routes in react application
+        // This function change the routes in react application
         navigate(`/cart/${productId}?qty=${qty}`);
     };
     return (

@@ -13,37 +13,39 @@ import {
     USER_UPDATE_PROFILE_REQUEST,
     USER_UPDATE_PROFILE_RESET,
     USER_UPDATE_PROFILE_SUCCESS,
-} from '../constants/userConstants';
+} from '../constants/userConstants'
 
+// User register reducer
 export const userRegisterReducer = (state = {}, action) => {
     switch (action.type) {
         case USER_REGISTER_REQUEST:
-            return { loading: true };
+            return { loading: true }
         case USER_REGISTER_SUCCESS:
-            return { loading: false, userInfo: action.payload };
+            return { loading: false, userInfo: action.payload }
         case USER_REGISTER_FAIL:
-            return { loading: false, error: action.payload };
+            return { loading: false, error: action.payload }
         default:
-            return state;
+            return state
     }
-};
+}
 
-// Empty object for deleting the userInfo - SIGNOUT case
+// User sign in reducer
 export const userSigninReducer = (state = {}, action) => {
     switch (action.type) {
         case USER_SIGNIN_REQUEST:
-            return { loading: true };
+            return { loading: true }
         case USER_SIGNIN_SUCCESS:
-            return { loading: false, userInfo: action.payload };
+            return { loading: false, userInfo: action.payload }
         case USER_SIGNIN_FAIL:
-            return { loading: false, error: action.payload };
+            return { loading: false, error: action.payload }
         case USER_SIGNOUT:
-            return {};
+            return {}
         default:
-            return state;
+            return state
     }
-};
+}
 
+// User details reducer
 export const userDetailsReducer = (state = { loading: true }, action) => {
     switch (action.type) {
         case USER_DETAILS_REQUEST:
@@ -53,10 +55,11 @@ export const userDetailsReducer = (state = { loading: true }, action) => {
         case USER_DETAILS_FAIL:
             return { loading: false, error: action.payload }
         default:
-            return state;
+            return state
     }
 }
 
+// User update profile reducer
 export const userUpdateProfileReducer = (state = {}, action) => {
     switch (action.type) {
         case USER_UPDATE_PROFILE_REQUEST:

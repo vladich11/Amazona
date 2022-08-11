@@ -1,4 +1,4 @@
-import Axios from 'axios';
+import Axios from 'axios'
 import {
     USER_DETAILS_FAIL,
     USER_DETAILS_REQUEST,
@@ -13,19 +13,20 @@ import {
     USER_UPDATE_PROFILE_FAIL,
     USER_UPDATE_PROFILE_REQUEST,
     USER_UPDATE_PROFILE_SUCCESS,
-} from '../constants/userConstants';
+} from '../constants/userConstants'
 
+// Register user
 export const register = (name, email, password) => async (dispatch) => {
-    dispatch({ type: USER_REGISTER_REQUEST, payload: { email, password } });
+    dispatch({ type: USER_REGISTER_REQUEST, payload: { email, password } })
     try {
-        // ajax request to get register info
-        const { data } = await Axios.post('/api/users/register', { name, email, password });
-        // dispatch the data payload to reducer (action.payload)
-        dispatch({ type: USER_REGISTER_SUCCESS, payload: data });
+        // Ajax request to get register info
+        const { data } = await Axios.post('/api/users/register', { name, email, password })
+        // Dispatch the data payload to reducer (action.payload)
+        dispatch({ type: USER_REGISTER_SUCCESS, payload: data })
         // Update store based on user signin (in app.js we read user signin to auth the user)
-        dispatch({ type: USER_SIGNIN_SUCCESS, payload: data });
+        dispatch({ type: USER_SIGNIN_SUCCESS, payload: data })
         // Save login info in localstorage so when user restart brower the info will be saved
-        localStorage.setItem('userInfo', JSON.stringify(data));
+        localStorage.setItem('userInfo', JSON.stringify(data))
     } catch (error) {
         dispatch({
             type: USER_REGISTER_FAIL,
@@ -33,19 +34,20 @@ export const register = (name, email, password) => async (dispatch) => {
                 error.response && error.response.data.message
                     ? error.response.data.message
                     : error.message,
-        });
+        })
     }
-};
+}
 
+// User signin
 export const signin = (email, password) => async (dispatch) => {
-    dispatch({ type: USER_SIGNIN_REQUEST, payload: { email, password } });
+    dispatch({ type: USER_SIGNIN_REQUEST, payload: { email, password } })
     try {
-        // ajax request to get signin info
-        const { data } = await Axios.post('/api/users/signin', { email, password });
-        // dispatch the data payload to reducer (action.payload)
-        dispatch({ type: USER_SIGNIN_SUCCESS, payload: data });
+        // Ajax request to get signin info
+        const { data } = await Axios.post('/api/users/signin', { email, password })
+        // Dispatch the data payload to reducer (action.payload)
+        dispatch({ type: USER_SIGNIN_SUCCESS, payload: data })
         // Save login info in localstorage so when user restart brower the info will be saved
-        localStorage.setItem('userInfo', JSON.stringify(data));
+        localStorage.setItem('userInfo', JSON.stringify(data))
     } catch (error) {
         dispatch({
             type: USER_SIGNIN_FAIL,
@@ -53,58 +55,56 @@ export const signin = (email, password) => async (dispatch) => {
                 error.response && error.response.data.message
                     ? error.response.data.message
                     : error.message,
-        });
+        })
     }
-};
+}
 
-// Delete from localStorage when user sign out
+// Clear localStorage when user sign out
 export const signout = () => (dispatch) => {
-    localStorage.removeItem('userInfo');
-    localStorage.removeItem('cartItems');
-    localStorage.removeItem('shippingAddress');
-    dispatch({ type: USER_SIGNOUT });
-};
-
+    localStorage.removeItem('userInfo')
+    localStorage.removeItem('cartItems')
+    localStorage.removeItem('shippingAddress')
+    dispatch({ type: USER_SIGNOUT })
+}
 
 // Show user details
-
 export const detailsUser = userId => async (dispatch, getState) => {
     dispatch({ type: USER_DETAILS_REQUEST, payload: userId })
-    //getting tokem from getstate
+    // Getting tokem from getstate
     const { userSignin: { userInfo } } = getState()
-    // ajax req
+    // Ajax req
     try {
-        //ajax req (real data when using await)
+        // Ajax req (real data when using await)
         const { data } = await Axios.get(`/api/users/${userId}`, {
             headers: { Authorization: `Bearer ${userInfo.token}` }
         })
-        //success action / data is user information
+        // Success action / data is user information
         dispatch({ type: USER_DETAILS_SUCCESS, payload: data })
     } catch (error) {
         const message = error.response && error.response.data.message
             ? error.response.data.message
             : error.message
-        //calling an action
+        // Calling an action
         dispatch({ type: USER_DETAILS_FAIL, payload: message })
     }
 
 }
 
-// Update user info (used in the profile)
 
+// Update user info 
 export const updateUserProfile = user => async (dispatch, getState) => {
     dispatch({ type: USER_UPDATE_PROFILE_REQUEST, payload: user })
-    //get user info
-    const { userSignin: { userInfo } } = getState();
+    // Get user info
+    const { userSignin: { userInfo } } = getState()
     try {
-        //ajax req to update userProfile
+        // Ajax req to update userProfile
         const { data } = await Axios.put(`/api/users/profile`, user, {
             headers: { Authorization: `Bearer ${userInfo.token}` }
         })
         dispatch({type: USER_UPDATE_PROFILE_SUCCESS, payload: data})
-        //update the user signin
+        // Update the user signin
         dispatch({type:USER_SIGNIN_SUCCESS, payload: data})
-        // update the localstorage
+        // Update the localstorage
         localStorage.setItem('userInfo', JSON.stringify(data))
     } catch (error) {
         const message = error.response && error.response.data.message

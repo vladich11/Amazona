@@ -12,16 +12,16 @@ export default function SigninScreen() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    //redirect 
+    
     const { search } = useLocation();
     const redirectInUrl = new URLSearchParams(search).get('redirect');
     const redirect = redirectInUrl ? redirectInUrl : '/';
 
-    // get user sign from store
+    // Get user sign from store
     const userSignin = useSelector((state) => state.userSignin);
     const { userInfo, loading, error } = userSignin;
 
-    //get dispatch from use dispatch hook in react redux
+    // Get dispatch from use dispatch hook in react redux
     const dispatch = useDispatch();
     const submitHandler = e => {
         // When user click on sign in button this form will not refresh(use ajax req instead)
