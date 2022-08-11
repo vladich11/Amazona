@@ -29,10 +29,10 @@ mongoose.connect(process.env.MONGODB_URL || 'mongodb://127.0.0.1/amazona');
 app.use('/api/uploads', uploadRouter)
 
 
-// Home page route
-app.get('/', (req, res) => {
-    res.send('Server is ready');
-});
+// // Home page route
+// app.get('/', (req, res) => {
+//     res.send('Server is ready');
+// });
 
 
 // Send the paypal id that located in the be to the fe
@@ -51,13 +51,20 @@ app.use('/api/orders', orderRouter);
 
 app.use((err, req, res, next) => {
     res.status(500).send({ message: err.message });
-  });
+});
 
 
 // Show images after an upload
 const __dirname = path.resolve();
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
 
+// Serve file inside build folder
+app.use(express.static(path.join(__dirname, '/frontend/build')))
+// Server all addresss by index.html
+// This the new home route for build version of react
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '/front/build/index.html'))
+})
 const port = process.env.PORT || 5000;
 
 app.listen(port, () => {
