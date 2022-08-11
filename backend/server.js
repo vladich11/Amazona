@@ -34,6 +34,8 @@ app.use('/api/uploads', uploadRouter)
 //     res.send('Server is ready');
 // });
 
+app.use('/api/users', userRouter);
+
 
 // Send the paypal id that located in the be to the fe
 app.get('/api/config/paypal', (req, res) => {
@@ -60,11 +62,13 @@ app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
 
 // Serve file inside build folder
 app.use(express.static(path.join(__dirname, '/frontend/build')))
+
 // Server all addresss by index.html
 // This the new home route for build version of react
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '/front/build/index.html'))
 })
+
 const port = process.env.PORT || 5000;
 
 app.listen(port, () => {
