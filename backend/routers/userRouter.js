@@ -7,6 +7,9 @@ import { generateToken, isAuth } from '../utils.js';
 
 const userRouter = express.Router();
 
+
+// base route is '/api/users',
+
 // Seed DB with users 
 userRouter.get(
     '/seed',

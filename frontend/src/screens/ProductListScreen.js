@@ -33,6 +33,7 @@ export default function ProductListScreen() {
     useEffect(() => {
         //successfully created a product -> reset
         if (successCreate) {
+            console.log("im in")
             dispatch({ type: PRODUCT_CREATE_RESET })
             navigate(`/product/${createdProduct._id}/edit`)
         }
@@ -50,8 +51,9 @@ export default function ProductListScreen() {
 
     // Create product handler
     const createHandler = () => {
+        console.log("im in createHandler")
         dispatch(createProduct());
-
+        console.log(`The successCreated is ${successCreate}`)
     }
     return (
         <div>

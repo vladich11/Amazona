@@ -50,17 +50,18 @@ export const productDetailsReducer = (state = { loading: true }, action) => {
 // Create Product reducer
 export const productCreateReducer = (state = {}, action) => {
     switch (action.type) {
-        case PRODUCT_CREATE_REQUEST:
-            return { loading: true }
-        case PRODUCT_CREATE_SUCCESS:
-            return { loading: false, success: true, payload: action.payload }
-        case PRODUCT_CREATE_FAIL:
-            return { loading: false, error: action.payload }
-        case PRODUCT_CREATE_RESET:
-            return {}
-        default: return state
+      case PRODUCT_CREATE_REQUEST:
+        return { loading: true };
+      case PRODUCT_CREATE_SUCCESS:
+        return { loading: false, success: true, product: action.payload };
+      case PRODUCT_CREATE_FAIL:
+        return { loading: false, error: action.payload };
+      case PRODUCT_CREATE_RESET:
+        return {};
+      default:
+        return state;
     }
-}
+  };
 
 // Product update reducer
 

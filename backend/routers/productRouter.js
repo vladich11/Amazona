@@ -37,7 +37,7 @@ productRouter.get(
     }))
 
 
-// Create products
+// Create product
 productRouter.post(
     '/',
     isAuth,
